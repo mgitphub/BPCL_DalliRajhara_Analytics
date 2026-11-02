@@ -1,0 +1,5 @@
+﻿*.tmp
+*.log
+*.pbix.temp
+.DS_Store
+Thumbs.db

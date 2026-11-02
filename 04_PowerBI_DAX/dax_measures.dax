@@ -1,0 +1,73 @@
+﻿// ==========================================================================
+// BHARAT PETROLEUM DALLI RAJHARA - CORE DAX MEASURES
+// ==========================================================================
+
+// --- BASELINE FINANCIALS ---
+
+Total Volume Sold (L) = 
+SUM(fact_dispenser_sales[volume_sold_litres])
+
+Total Gross Turnover = 
+SUM(fact_dispenser_sales[gross_revenue])
+
+Dealer Gross Commission = 
+SUM(fact_dispenser_sales[dealer_gross_margin])
+
+Station Total Opex = 
+COALESCE(SUM(fact_daily_operating_expense[total_daily_opex]), 0)
+
+Net Daily Operating Profit = 
+[Dealer Gross Commission] - [Station Total Opex]
+
+Net Profit Margin % = 
+DIVIDE([Net Daily Operating Profit], [Total Gross Turnover], 0)
+
+// --- 24x7 SHIFT & MINING FLEET MONITORING ---
+
+Night Shift Diesel Volume = 
+CALCULATE(
+    [Total Volume Sold (L)],
+    dim_shift[shift_code] = "SH-NIG",
+    dim_product[sap_material_code] = "MAT-HSD-201"
+)
+
+Mining Credit Exposure = 
+CALCULATE(
+    [Total Gross Turnover],
+    fact_dispenser_sales[payment_mode] = "FLEET_CREDIT",
+    dim_customer[customer_type] = "MINING_SAIL"
+)
+
+Credit Risk Ratio = 
+DIVIDE([Mining Credit Exposure], [Total Gross Turnover], 0)
+
+// --- TIME INTELLIGENCE & ROLLING DRIFT ---
+
+Operating Profit YTD = 
+TOTALYTD([Net Daily Operating Profit], dim_date[full_date])
+
+Operating Profit Prior Day = 
+CALCULATE(
+    [Net Daily Operating Profit],
+    DATEADD(dim_date[full_date], -1, DAY)
+)
+
+Daily Profit DoD Variance % = 
+DIVIDE([Net Daily Operating Profit] - [Operating Profit Prior Day], [Operating Profit Prior Day], 0)
+
+7-Day Rolling Avg Daily Profit = 
+AVERAGEX(
+    DATESINPERIOD(dim_date[full_date], LASTDATE(dim_date[full_date]), -7, DAY),
+    [Net Daily Operating Profit]
+)
+
+// --- TANK SHRINKAGE & EVAPORATION LOSS ---
+
+Total Tank Evaporation Loss (L) = 
+SUM(fact_daily_tank_dip[shrinkage_loss_litres])
+
+Shrinkage Loss Cost Impact = 
+SUMX(
+    fact_daily_tank_dip,
+    fact_daily_tank_dip[shrinkage_loss_litres] * RELATED(dim_product[current_cost_price])
+)

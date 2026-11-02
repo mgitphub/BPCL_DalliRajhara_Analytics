@@ -1,0 +1,57 @@
+﻿{
+  "enterprise_structure": {
+    "company_code": "1000",
+    "sales_org": "1100",
+    "distribution_channels": {
+      "10": "Forecourt Retail",
+      "20": "Institutional / Mining Bulk"
+    },
+    "divisions": {
+      "01": "Fuels (MS & HSD)",
+      "02": "Lubricants & MAK Grease"
+    },
+    "sales_areas": [
+      "1100-10-01",
+      "1100-20-01"
+    ],
+    "plant": "CG01",
+    "storage_locations": [
+      { "code": "TK01", "description": "MS Underground Tank 01", "capacity_litres": 20000 },
+      { "code": "TK02", "description": "HSD Underground Tank 02", "capacity_litres": 25000 },
+      { "code": "TK03", "description": "HSD Underground Tank 03", "capacity_litres": 25000 },
+      { "code": "TK04", "description": "Speed Petrol Underground Tank 04", "capacity_litres": 15000 },
+      { "code": "LB01", "description": "Lube Bay Godown", "capacity_litres": 0 }
+    ],
+    "purchasing_org": "1100",
+    "purchasing_group": "P01"
+  },
+  "materials": [
+    { "code": "MAT-MS-101", "description": "Motor Spirit 91 Octane", "uom": "L", "category": "FUEL" },
+    { "code": "MAT-HSD-201", "description": "High Speed Diesel BS-VI", "uom": "L", "category": "FUEL" },
+    { "code": "MAT-SPD-301", "description": "Speed High Octane Petrol", "uom": "L", "category": "FUEL" },
+    { "code": "MAT-LUB-401", "description": "MAK Diamond 15W-40 5L", "uom": "EA", "category": "LUBRICANT" },
+    { "code": "MAT-LUB-501", "description": "MAK 4T Royal 20W-50 1L", "uom": "EA", "category": "LUBRICANT" }
+  ],
+  "partners": {
+    "vendors": [
+      { "code": "VEND-BPCL-01", "name": "BPCL Mandir Hasaud / Bhilai Terminal", "recon_account": "210000" }
+    ],
+    "customers": [
+      { "code": "CUST-CASH-00", "name": "Counter Cash/UPI Customers", "account_type": "CPD", "credit_limit": 0 },
+      { "code": "CUST-SAIL-01", "name": "SAIL Dalli Rajhara Mines", "account_type": "MINING_SAIL", "credit_limit": 5000000, "terms": "NT30" },
+      { "code": "CUST-NMDC-02", "name": "Logistics Fleet Hauler", "account_type": "CORPORATE_FLEET", "credit_limit": 2000000, "terms": "NT15" }
+    ]
+  },
+  "pricing_procedure": {
+    "schema": "ZPETRO",
+    "condition_types": [
+      { "step": 10, "condition": "PR00", "description": "Base Ex-Depot Price" },
+      { "step": 20, "condition": "ZEXT", "description": "Central Excise Duty" },
+      { "step": 30, "condition": "ZVLT", "description": "CG State Commercial Tax/VAT" },
+      { "step": 40, "condition": "ZCESS", "description": "Pollution & Infra Cess" },
+      { "step": 50, "condition": "ZCOMM", "description": "Dealer Retail Commission" },
+      { "step": 60, "condition": "ZFRE", "description": "Freight Delivery Surcharge" },
+      { "step": 70, "condition": "MWST", "description": "GST 18% (Lubricants Only)" }
+    ]
+  }
+}
